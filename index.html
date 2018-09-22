@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Super Chat temps réel !</title>
+        <style>
+            #zone_chat strong {
+                color: white;
+                background-color: black;
+                padding: 2px;
+            }
+        </style>
+    </head>
+ 
+    <body id="body">
+        <h1>Changer les drapeaux de couleur</h1>
+        
+        <form action="/" method="post" id="drapeau_jaune">
+            <input type="submit" id="colorier_drapeau_jaune" value="Drapeau Jaune" />
+        </form>
+
+        <form action="/" method="post" id="drapeau_bleu">
+            <input type="submit" id="colorier_drapeau_bleu" value="Drapeau Bleu" />
+        </form>
+
+        <form action="/" method="post" id="drapeau_noir">
+            <label for="num">Numéro Coureur : </label>
+            <input type="number" name="num" id="num" placeholder="Le numéro du coureur" size="4" autofocus />
+            <input type="submit" id="colorier_drapeau_noir" value="Drapeau Noir" />
+        </form>
+
+        <div id="drapeau" style="width: 600px;height: 280px;"></div>
+            <!-- If a certian Id exist destroy jquery for black numbers-->
+        <section id="zone_chat">
+            
+        </section>
+
+
+        <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+
+            // Connexion à socket.io
+            var socket = io.connect('http://localhost:8080');
+
+            // Quand qqun click sur drapeau jaune on l'envoi aux autres
+            socket.on('drapeau_jaune', function(data) {
+                colorierDrapeauJaune();
+            });
+
+            // Quand qqun click sur drapeau bleu on l'envoi aux autres
+            socket.on('drapeau_bleu', function(data) {
+                colorierDrapeauBleu();
+            });
+
+            // Quand qqun click sur drapeau noir on l'envoi aux autres
+            socket.on('drapeau_noir', function(data) {
+                colorierDrapeauNoir(data.num);
+            });
+
+            // Lorsqu'on envoie le formulaire, on transmet le drapeau jaune aux autres
+            $('#drapeau_jaune').submit(function () {
+                socket.emit('drapeau_jaune'); // Transmet le message aux autres
+                colorierDrapeauJaune();
+                return false; // Permet de bloquer l'envoi "classique" du formulaire
+            });
+
+            // Lorsqu'on envoie le formulaire, on transmet le drapeau bleu aux autres
+            $('#drapeau_bleu').submit(function () {
+                socket.emit('drapeau_bleu'); // Transmet le message aux autres
+                colorierDrapeauBleu();
+                return false; // Permet de bloquer l'envoi "classique" du formulaire
+            });
+
+            // Lorsqu'on envoie le formulaire, on transmet le drapeau noir aux autres
+            $('#drapeau_noir').submit(function () {
+                var num = $('#num').val();
+                socket.emit('drapeau_noir', num); // Transmet le message aux autres
+                colorierDrapeauNoir(num);
+                return false; // Permet de bloquer l'envoi "classique" du formulaire
+            });
+
+            function colorierDrapeauJaune() {
+                $('#texte_drapeau').remove();
+                $('#drapeau').css("background-color", "yellow");
+            }
+
+            function colorierDrapeauBleu() {
+                $('#texte_drapeau').remove();
+                $('#drapeau').css("background-color", "blue");
+            }
+
+            function colorierDrapeauNoir(num) {
+                $('#texte_drapeau').remove();
+                $('#drapeau').css("background-color", "black");
+                $('#drapeau').prepend("<h2 id=\"texte_drapeau\" style=\"color: white;text-align:center;padding-top:100px;font-size: 80px;\">"+num+"</h2>");
+            }
+        </script>
+    </body>
+</html>
