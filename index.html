@@ -30,7 +30,6 @@
         </form>
 
         <div id="drapeau" style="width: 600px;height: 280px;"></div>
-            <!-- If a certian Id exist destroy jquery for black numbers-->
         <section id="zone_chat">
             
         </section>
@@ -40,44 +39,37 @@
         <script src="/socket.io/socket.io.js"></script>
         <script>
 
-            // Connexion à socket.io
             var socket = io.connect('http://localhost:8080');
 
-            // Quand qqun click sur drapeau jaune on l'envoi aux autres
             socket.on('drapeau_jaune', function(data) {
                 colorierDrapeauJaune();
             });
 
-            // Quand qqun click sur drapeau bleu on l'envoi aux autres
             socket.on('drapeau_bleu', function(data) {
                 colorierDrapeauBleu();
             });
 
-            // Quand qqun click sur drapeau noir on l'envoi aux autres
             socket.on('drapeau_noir', function(data) {
                 colorierDrapeauNoir(data.num);
             });
 
-            // Lorsqu'on envoie le formulaire, on transmet le drapeau jaune aux autres
             $('#drapeau_jaune').submit(function () {
-                socket.emit('drapeau_jaune'); // Transmet le message aux autres
+                socket.emit('drapeau_jaune');
                 colorierDrapeauJaune();
-                return false; // Permet de bloquer l'envoi "classique" du formulaire
+                return false;
             });
 
-            // Lorsqu'on envoie le formulaire, on transmet le drapeau bleu aux autres
             $('#drapeau_bleu').submit(function () {
-                socket.emit('drapeau_bleu'); // Transmet le message aux autres
+                socket.emit('drapeau_bleu');
                 colorierDrapeauBleu();
-                return false; // Permet de bloquer l'envoi "classique" du formulaire
+                return false;
             });
 
-            // Lorsqu'on envoie le formulaire, on transmet le drapeau noir aux autres
             $('#drapeau_noir').submit(function () {
                 var num = $('#num').val();
-                socket.emit('drapeau_noir', num); // Transmet le message aux autres
+                socket.emit('drapeau_noir', num);
                 colorierDrapeauNoir(num);
-                return false; // Permet de bloquer l'envoi "classique" du formulaire
+                return false;
             });
 
             function colorierDrapeauJaune() {
