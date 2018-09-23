@@ -11,6 +11,10 @@ app.get('/', function (req, res) {
 
 io.sockets.on('connection', function (socket) {
 
+    socket.on('drapeau_asd', function () {
+        socket.broadcast.emit('drapeau_asd', {});
+    }); 
+
     socket.on('drapeau_jaune', function () {
         socket.broadcast.emit('drapeau_jaune', {});
     }); 
