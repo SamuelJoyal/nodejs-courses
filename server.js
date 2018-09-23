@@ -27,5 +27,3 @@ io.sockets.on('connection', function (socket) {
         socket.broadcast.emit('drapeau_noir', {num: num});
     }); 
 });
-
-server.listen(80);
